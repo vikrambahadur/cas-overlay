@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Licensed to Jasig under one or more contributor license
+  ~ agreements. See the NOTICE file distributed with this work
+  ~ for additional information regarding copyright ownership.
+  ~ Jasig licenses this file to you under the Apache License,
+  ~ Version 2.0 (the "License"); you may not use this file
+  ~ except in compliance with the License.  You may obtain a
+  ~ copy of the License at the following location:
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+
+  <bean id="ldapAuthenticationHandler" class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler"
+         p:filter="${ldap.authentication.filter}"
+         p:searchBase="${ldap.authentication.basedn}"
+         p:contextSource-ref="contextSource"
+         p:searchContextSource-ref="pooledContextSource"
+         p:ignorePartialResultException="${ldap.authentication.ignorePartialResultException}" />
+    
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+	    <property name="pooled" value="false"/>
+	    <property name="urls">
+	      <bean class="org.springframework.util.StringUtils" factory-method="commaDelimitedListToSet">
+	          <constructor-arg type="java.lang.String" value="${ldap.authentication.server.urls}"/>
+	      </bean>
+	  	</property>
+	    <property name="userDn" value="${ldap.authentication.manager.userdn}"/>
+	    <property name="password" value="${ldap.authentication.manager.password}"/>
+	
+	    <property name="baseEnvironmentProperties">
+	      <map>
+	        <entry key="com.sun.jndi.ldap.connect.timeout" value="${ldap.authentication.jndi.connect.timeout}" />
+	        <entry key="com.sun.jndi.ldap.read.timeout" value="${ldap.authentication.jndi.read.timeout}" />
+	        <entry key="java.naming.security.authentication" value="${ldap.authentication.jndi.security.level}" />
+	      </map>
+	    </property>
+	</bean>
+
+	<bean id="dirContextValidator" class="org.springframework.ldap.pool.validation.DefaultDirContextValidator">
+	  <property name="searchControls">
+	    <bean class="javax.naming.directory.SearchControls"
+		      p:timeLimit="1000"
+		      p:countLimit="1"
+		      p:searchScope="0"
+		      p:returningAttributes="" />
+	  </property>
+	</bean>
+
+  	<bean id="pooledContextSource"
+          class="org.springframework.ldap.pool.factory.PoolingContextSource"
+          p:minIdle="${ldap.authentication.pool.minIdle}"
+          p:maxIdle="${ldap.authentication.pool.maxIdle}"
+          p:maxActive="${ldap.authentication.pool.maxSize}"
+          p:maxWait="${ldap.authentication.pool.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${ldap.authentication.pool.evictionPeriod}"
+          p:minEvictableIdleTimeMillis="${ldap.authentication.pool.idleTime}"
+          p:testOnBorrow="${ldap.authentication.pool.testOnBorrow}"
+          p:testWhileIdle="${ldap.authentication.pool.testWhileIdle}"
+          p:testOnReturn="${ldap.authentication.pool.testOnReturn}"
+          p:dirContextValidator-ref="dirContextValidator"
+          p:contextSource-ref="contextSource" />
+</beans>

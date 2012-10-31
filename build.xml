@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+
+<project name="cas" default="deploy" basedir=".">
+
+	<!-- ******************* PROPERTIES ************************* -->
+	<property name="build.target.dir" value="target" />
+
+	<property environment="env" />
+
+	<property name="catalina.home" value="${env.CATALINA_HOME}" />
+
+	<condition property="mavenExecutableFile" value="mvn.bat" else="mvn">
+		<os family="windows" />
+	</condition>
+	<property name="mavenExecutable" value="${env.MAVEN_HOME}\bin\${mavenExecutableFile}" />
+
+	<condition property="tomcatStartupFile" value="startup.bat" else="startup">
+		<os family="windows" />
+	</condition>
+	<property name="tomcatStartup" value="${catalina.home}\bin\${tomcatStartupFile}" />
+
+	<condition property="tomcatShutDownFile" value="shutdown.bat" else="shutdown">
+		<os family="windows" />
+	</condition>
+	<property name="tomcatShutDown" value="${catalina.home}\bin\${tomcatShutDownFile}" />
+		
+	<!-- ******************************************************** -->
+
+	<target name="getMavenProfileIdForCAS">
+		<echo>A maven profile id is requied for this build. Profiles are defined such that proper filters and settings can be appropriately
+built for this instance of the CAS server. Profiles are defined inside the 'pom.xml' file. The name of the profile should match the 
+filter property inside the 'filters' directory.
+		</echo>
+		
+    <fileset id="build.profiles.fileset" dir="filters" casesensitive="false">
+      <patternset>
+        <include name="**/*.properties"/>
+        <exclude name="**/common.properties"/>
+      </patternset>
+    </fileset>
+    <property name="build.available.profiles" refid="build.profiles.fileset"/>
+    <echo message="${build.available.profiles}" file="${build.target.dir}/profiles.tmp" />
+    
+    <replace file="${build.target.dir}/profiles.tmp" value="${line.separator}">
+      <replacefilter>
+        <replacetoken>.properties</replacetoken> 
+        <replacevalue />
+      </replacefilter>
+      <replacetoken>;</replacetoken> 
+    </replace>
+    
+    <loadfile srcFile="${build.target.dir}/profiles.tmp" property="build.profile.ids" />
+    <delete file="${build.target.dir}/profiles.tmp" quiet="true" deleteonexit="true" />
+    
+    <echo/>
+    <echo>Available profile ids for this build are:</echo>
+    <echo message="${build.profile.ids}" />
+    
+		<input message="Maven profile id:" addproperty="cas.profile.id" defaultvalue="localhost" />
+		<condition property="has.cas.profile.id">
+			<not>
+				<equals arg1="" arg2="${cas.profile.id}" />
+			</not>
+		 </condition>
+		 <fail unless="${has.cas.profile.id}">CAS Maven profile id cannot be blank.</fail>
+		
+		 <available file="filters/${cas.profile.id}.properties" property="exists.cas.profile.id" />
+		 <fail unless="${exists.cas.profile.id}">Maven filter property file does not exist for the given profile id.</fail>
+	</target>
+	
+	<target name="cleanTomcatLogs" description="Clean tomcat log files">
+		<delete failonerror="false" verbose="true">
+			<fileset dir="${catalina.home}/logs" includes="**/*.*" />
+		</delete>
+	</target>
+
+	<target name="clean" description="Clean deployed artifacts and logs">
+		<delete file="${catalina.home}/webapps/${ant.project.name}.war" verbose="false" />
+		<delete dir="${catalina.home}/webapps/${ant.project.name}" verbose="false" includeemptydirs="true" />				
+    	<delete dir="${catalina.home}/work/Catalina/localhost/${ant.project.name}" verbose="false" includeemptydirs="true" />	
+		<antcall target="cleanTomcatLogs" />
+    	<exec dir="." executable="${mavenExecutable}">
+      		<arg value="clean" />
+    	</exec>	
+	</target>
+
+	<target name="copy" description="Copy artifacts over to tomcat" depends="package">
+		<copy verbose="true" overwrite="true" todir="${catalina.home}\webapps" file="target/${ant.project.name}.war" />
+	</target>
+
+	<target name="package" description="Package src artifacts and prepare for deployment" depends="clean,getMavenProfileIdForCAS">
+		<echo message="Building CAS based on maven profile ${cas.profile.id}..." />
+		<exec dir="." executable="${mavenExecutable}">
+			<arg value="clean" />
+			<arg value="package" />
+			<arg value="-Denvironment=${cas.profile.id}" />
+			<arg value="-Dmaven.test.skip=true" />
+		</exec>
+		
+	</target>
+
+	<target name="deploy" depends="copy" description="Clean, package and deploy artifacts" />
+
+	<target name="startTomcat" description="Start the tomcat server">
+		<exec dir="${catalina.home}" executable="${tomcatStartup}" />
+	</target>
+
+	<target name="stopTomcat" description="Stop the tomcat server">
+		<exec dir="${catalina.home}" executable="${tomcatShutDown}" />
+	</target>
+
+
+	<target name="help" description="Prints instructions on how to run the build.">
+		<echo message="Use 'ant -projecthelp' to see all available commands" />
+	</target>
+
+	<target name="init" depends="stopTomcat, deploy, startTomcat" description="Copy all changes to tomcat and restart the service to deploy. " />
+</project>
+
