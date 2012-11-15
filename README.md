@@ -6,6 +6,7 @@ and features the following:
 * Support for EhCache ticket registry with a two-node active-active setup
 * Support for Jasypt encryption/decryption of sensitive CAS settings
 * Support for Ldap authentication and attribute retrieval/release
+* Support for ClearPass 
 * Support for environment/tier specific builds through [Apache Maven filters](http://maven.apache.org/shared/maven-filtering/)
 * Support for a _fully_ automated build
 
