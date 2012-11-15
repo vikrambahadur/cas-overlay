@@ -1,4 +1,2 @@
-bgsu-cas
+CAS Maven Overlay
 ========
-
-Bowling Green State University CAS Maven overlay
