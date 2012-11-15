@@ -6,7 +6,7 @@ and features the following:
 * Support for EhCache ticket registry with a two-node active-active setup
 * Support for Jasypt encryption/decryption of sensitive CAS settings
 * Support for Ldap authentication and attribute retrieval/release
-* Support for environment/tier specific builds through Maven filters.
+* Support for environment/tier specific builds through Maven filters
 * Support for a _fully_ automated build
 
 # Requirements
@@ -71,11 +71,12 @@ Default target: help
 # Build
 
 * Set the `CATALINA_HOME` environment variable to point to the tomcat directory
+* Set the `MAVEN_HOME` and `ANT_HOME` environment variables 
 * Set the `CAS_JASYPT_ENC_PASSWORD` environment variable to the encryption password used
 * Configure `common.properties`
 * Configure the appropriate environment filter (i.e. `localhost.properties`)
 * Execute `ant deploy`
 * The build will list the available environment filters. It will then ask you for the environment name/id for which 
-CAS is to be deployed. 
+CAS is to be deployed
 
 *Note:* You should execute the build from the command prompt with suffient privileges. 
