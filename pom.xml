@@ -11,8 +11,9 @@
 		<cas.version>3.5.1</cas.version>
 		<apache.commons.pool.version>1.6</apache.commons.pool.version>
         <cas.addons.version>1.0.3</cas.addons.version>
-    
-       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jasypt.version>1.9.0</jasypt.version>
+	
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
 	<build>
@@ -36,7 +37,7 @@
 							<filtering>true</filtering>
 						</resource>
             
-            <resource>
+						<resource>
 							<directory>${basedir}/opt</directory>
 							<targetPath>opt</targetPath>
 							<includes>
@@ -53,58 +54,58 @@
 	</build>
 
 	<dependencies>
-    <dependency>
-        <groupId>net.unicon.cas</groupId>
-        <artifactId>cas-addons</artifactId>
-        <version>${cas.addons.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.jasig.cas.client</groupId>
-            <artifactId>cas-client-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>net.sf.ezmorph</groupId>
-            <artifactId>ezmorph</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.codehaus.jettison</groupId>
-            <artifactId>jettison</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>javax.xml.stream</groupId>
-            <artifactId>stax-api</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-          </exclusion>
-        </exclusions>
-    </dependency>
-    
+		<dependency>
+			<groupId>net.unicon.cas</groupId>
+			<artifactId>cas-addons</artifactId>
+			<version>${cas.addons.version}</version>
+			<exclusions>
+			  <exclusion>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>org.jasig.cas.client</groupId>
+				<artifactId>cas-client-core</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>net.sf.ezmorph</groupId>
+				<artifactId>ezmorph</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>org.codehaus.jettison</groupId>
+				<artifactId>jettison</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>javax.xml.stream</groupId>
+				<artifactId>stax-api</artifactId>
+			  </exclusion>
+			  <exclusion>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+			  </exclusion>
+			</exclusions>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-webapp</artifactId>
@@ -113,18 +114,24 @@
 			<scope>runtime</scope>
 		</dependency>
 
-    <dependency>
+		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-core</artifactId>
 			<version>${cas.version}</version>
 			<scope>compile</scope>
 		</dependency>
-    
+	
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-extension-clearpass</artifactId>
 			<version>${cas.version}</version>
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>servlet-api</artifactId>
+					<groupId>javax.servlet</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -133,12 +140,14 @@
 			<version>${cas.version}</version>
 			<scope>runtime</scope>
 		</dependency>
+		
 
+		
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-integration-ehcache</artifactId>
 			<version>${cas.version}</version>
-      <scope>compile</scope>
+			<scope>compile</scope>
 		</dependency>
    
 		<dependency>
@@ -146,6 +155,27 @@
 			<artifactId>commons-pool</artifactId>
 			<version>${apache.commons.pool.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-generic</artifactId>
+			<version>${cas.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.jasypt</groupId>
+		  <artifactId>jasypt</artifactId>
+		  <version>${jasypt.version}</version>
+		  <scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.jasypt</groupId>
+		  <artifactId>jasypt-spring31</artifactId>
+		  <version>${jasypt.version}</version>
+		  <scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
@@ -156,12 +186,12 @@
 		</repository>
 	</repositories>
 
-  <profiles>
-    <profile>
+	<profiles>
+		<profile>
 			<id>buildProfileId</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
 			<build>
 				<filters>
 					<filter>filters/${environment}.properties</filter>
