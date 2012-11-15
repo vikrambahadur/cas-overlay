@@ -33,6 +33,10 @@ the Jasypt library.
 
 The current version used is `1.9.0`.
 
+A number of settings are decorated using the Jasypt special `ENC` modifier. You may use the appropriate build target
+to provide the encrypted value for the setting. To allow CAS to decrypt the password at runtime, set the environment
+variable `CAS_JASYPT_ENC_PASSWORD` to the encryption password. 
+
 ## Build script
 Though the build process is primarily controlled by Apache Maven, the actual script that invokes the Maven build is
 done through Apache Ant:
