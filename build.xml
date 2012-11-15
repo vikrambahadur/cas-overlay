@@ -10,13 +10,16 @@
 	OF ANY KIND, either express or implied. See the License for the specific 
 	language governing permissions and limitations under the License. -->
 
-<project name="cas" default="deploy" basedir=".">
+<project name="cas" default="help" basedir=".">
 
 	<!-- ******************* PROPERTIES ************************* -->
 	<property environment="env" />
 	
 	<property name="build.target.dir" value="target" />
+	<property file="${basedir}/filters/common.properties"/>
+	
 	<property name="jasypt.bin.dir" value="${basedir}/lib/jasypt-1.9.0" />
+	
 	<property name="catalina.home" value="${env.CATALINA_HOME}" />
 	
 	<!-- ******************* MAVEN ************************* -->
@@ -144,7 +147,7 @@ filter property inside the 'filters' directory.
 		 </condition>
 		 <fail unless="${has.jasypt.arg.input}">Encryption input string cannot be blank.</fail>
 		 
-		<input message="Password (secret key) to encrypt the input string:" addproperty="jasypt.encrypt.arg.password" defaultvalue="jasypt" />
+		<input message="Password (secret key) to encrypt the input string:" addproperty="jasypt.encrypt.arg.password" defaultvalue="${env.CAS_JASYPT_ENC_PASSWORD}" />
 		<condition property="has.jasypt.encrypt.arg.password">
 			<not>
 				<equals arg1="" arg2="${jasypt.encrypt.arg.password}" />
@@ -152,9 +155,9 @@ filter property inside the 'filters' directory.
 		 </condition>
 		 <fail unless="${has.jasypt.encrypt.arg.password}">Encryption password cannot be blank.</fail>
 		 
-		<input message="Encryption algorithm:" addproperty="jasypt.encrypt.arg.alg" defaultvalue="PBEWITHSHA1ANDDESEDE"  />
-		<input message="Number of encryption iterations:" addproperty="jasypt.encrypt.arg.iter" defaultvalue="5"  />
-		<input message="Encryption output type [base64,hexadecimal]:" addproperty="jasypt.encrypt.arg.outputType" defaultvalue="base64"  />
+		<input message="Encryption algorithm:" addproperty="jasypt.encrypt.arg.alg" defaultvalue="${cas.jasypt.encryption.config.algorithm}"  />
+		<input message="Number of encryption iterations:" addproperty="jasypt.encrypt.arg.iter" defaultvalue="${cas.jasypt.encryption.config.key.iterations}"  />
+		<input message="Encryption output type [base64,hexadecimal]:" addproperty="jasypt.encrypt.arg.outputType" defaultvalue="${cas.jasypt.encryption.config.output.type}"  />
 		
 		<exec dir="." executable="${jasyptEncryptExecutable}" >
 			<arg line="input=${jasypt.encrypt.arg.input}" />
@@ -175,7 +178,7 @@ filter property inside the 'filters' directory.
 		 </condition>
 		 <fail unless="${has.jasypt.arg.input}">Decryption input string cannot be blank.</fail>
 		 
-		<input message="Password (secret key) to decrypt the input string:" addproperty="jasypt.decrypt.arg.password" defaultvalue="jasypt" />
+		<input message="Password (secret key) to decrypt the input string:" addproperty="jasypt.decrypt.arg.password" defaultvalue="${env.CAS_JASYPT_ENC_PASSWORD}" />
 		<condition property="has.jasypt.decrypt.arg.password">
 			<not>
 				<equals arg1="" arg2="${jasypt.decrypt.arg.password}" />
@@ -183,9 +186,9 @@ filter property inside the 'filters' directory.
 		 </condition>
 		 <fail unless="${has.jasypt.decrypt.arg.password}">Decryption password cannot be blank.</fail>
 		 
-		<input message="decryption algorithm:" addproperty="jasypt.decrypt.arg.alg" defaultvalue="PBEWITHSHA1ANDDESEDE"  />
-		<input message="Number of decryption iterations:" addproperty="jasypt.decrypt.arg.iter" defaultvalue="5"  />
-		<input message="decryption output type [base64,hexadecimal]:" addproperty="jasypt.decrypt.arg.outputType" defaultvalue="base64"  />
+		<input message="decryption algorithm:" addproperty="jasypt.decrypt.arg.alg" defaultvalue="${cas.jasypt.encryption.config.algorithm}"  />
+		<input message="Number of decryption iterations:" addproperty="jasypt.decrypt.arg.iter" defaultvalue="${cas.jasypt.encryption.config.key.iterations}"  />
+		<input message="decryption output type [base64,hexadecimal]:" addproperty="jasypt.decrypt.arg.outputType" defaultvalue="${cas.jasypt.encryption.config.output.type}"  />
 		
 		<exec dir="." executable="${jasyptDecryptExecutable}" >
 			<arg line="input=${jasypt.decrypt.arg.input}" />

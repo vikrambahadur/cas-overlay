@@ -51,6 +51,24 @@
 		<property name="authenticationHandlers">
 			<list>
 				<bean class="org.jasig.cas.authentication.handler.support.HttpBasedServiceCredentialsAuthenticationHandler" p:httpClient-ref="httpClient" />
+				
+				<!--
+				<bean class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
+				
+				<bean class="org.jasig.cas.adaptors.generic.AcceptUsersAuthenticationHandler">
+				   <property name="users">
+					  <map>
+						 <entry>
+							<key>
+							   <value>${ldap.authentication.manager.userdn}</value>
+							</key>
+							<value>${ldap.authentication.manager.password}</value>
+						 </entry>
+					  </map>
+				   </property>
+				</bean>
+				-->
+				
 				<ref bean="ldapAuthenticationHandler" />        
       </list>
     </property>
