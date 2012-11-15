@@ -15,7 +15,7 @@ and features the following:
 3. [Apache Tomcat](http://tomcat.apache.org/) 6 or 7
 4. Java 6 or 7
 
-# Structure
+# Configuration
 ## Filters
 Maven filters which describe different settings specific to the build environment are defined inside the `filters`
 directory. The available filters currently are:
@@ -34,7 +34,7 @@ the Jasypt library.
 
 The current version used is `1.9.0`.
 
-A number of settings are decorated using the Jasypt special `ENC` modifier. You may use the appropriate build target
+[A number of settings are decorated](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/cas.properties#L114) using the Jasypt special `ENC` modifier. You may use the appropriate build target
 to provide the encrypted value for the setting. To allow CAS to decrypt the password at runtime, set the environment
 variable `CAS_JASYPT_ENC_PASSWORD` to the encryption password. At a minimum, you should provide an encrypted password
 for the setting `cas.ldap.manager.psw`:
@@ -67,6 +67,20 @@ targets are currently available:
 
 Default target: help
 ```
+## Strtucture
+The actual CAS Spring configuration are broken apart into the following files:
+
+* [`ehcache-replicated.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/ehcache-replicated.xml): Contains the EhCache ticket replication settings through RMI
+* [`attributes-configuration.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/attributes-configuration.xml): Defines the policy and settings around attribute retrieval
+* [`clearpass-configuration.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/clearpass-configuration.xml): Enables the CAS clearPass extension
+* [`ldap-configuration.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/ldap-configuration.xml): Defines settings that configure Ldap authentication
+* [`ticketRegistry.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/ticketRegistry.xml): Defines the ticket registry implementation that is backed by EhCache
+* [`services-configuration.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/services-configuration.xml): Defines the JSON service registry implementation
+* [`service-reg-configuration.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/service-reg-configuration.xml): Defines the access policy of the service registry UI
+* [`propertyFileConfigurer.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/propertyFileConfigurer.xml): Define a Jasypt enabled `EncryptablePropertyPlaceholderConfigurer`
+* [`log4j.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/classes/log4j.xml): Defines CAS logging configuration
+
+Note: You don't need to modify any of the files above, unless you are planning to extend the CAS behavior. Appropriate and relevant settings are abstracted and extracted out to environment filters. 
 
 # Build
 
