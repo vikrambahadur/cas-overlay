@@ -67,6 +67,7 @@ Default target: help
 # Build
 
 * Set the `CATALINA_HOME` environment variable to point to the tomcat directory
+* Set the `CAS_JASYPT_ENC_PASSWORD` environment variable to the encryption password used
 * Configure `common.properties`
 * Configure the appropriate environment filter (i.e. `localhost.properties`)
 * Execute `ant deploy`
