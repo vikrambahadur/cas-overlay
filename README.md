@@ -35,7 +35,10 @@ The current version used is `1.9.0`.
 
 A number of settings are decorated using the Jasypt special `ENC` modifier. You may use the appropriate build target
 to provide the encrypted value for the setting. To allow CAS to decrypt the password at runtime, set the environment
-variable `CAS_JASYPT_ENC_PASSWORD` to the encryption password. 
+variable `CAS_JASYPT_ENC_PASSWORD` to the encryption password. At a minimum, you should provide an encrypted password
+for the setting `cas.ldap.manager.psw`:
+
+`cas.ldap.manager.psw = SRls87Kn7W3stoH/98WP6g==`
 
 ## Build script
 Though the build process is primarily controlled by Apache Maven, the actual script that invokes the Maven build is
