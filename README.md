@@ -1,11 +1,11 @@
-CAS Maven Overlay
-========
+# CAS Maven Overlay
 This is a sample Jasig CAS overlay. The build is based on CAS `3.5.1` and cas-addons `1.0.3` 
 and features the following:
 
 * Support for JSON service registry with automatic reloads
 * Support for EhCache ticket registry with a two-node active-active setup
 * Support for Jasypt encryption/decryption of sensitive CAS settings
+* Support for Ldap authentication and attribute retrieval/release
 * Support for a _fully_ automated build
 
 # Requirements
@@ -22,8 +22,9 @@ directory. The available filters currently are:
 * `common.properties`: describes settings common to all build environments
 * `node1.properties`: describes settings specific to the first CAS node
 * `node2.properties`: describes settings specific to the second CAS node
+* `localhost.properties`: describes settings specific to the current localhost dev environment
 
-Please refer to inline comments to understand purpose and intent of the available settings
+Please refer to inline comments to understand purpose and intent of the available settings.
 
 ## Jasypt
 The `lib` folder contains the Jasypt CLI, used by the build process to encrypt/decrypt CAS settings that are specially
@@ -32,6 +33,18 @@ the Jasypt library.
 
 The current version used is `1.9.0`.
 
+## Build script
+Though the build process is primarily controlled by Apache Maven, the actual script that invokes the Maven build is
+done through Apache Ant:
+
+1. `pom.xml`: Apache Maven build descriptor; lists dependencies and versions.
+2. `build.xml`: Apache Ant bulid script; exposes various `target`s to invoke maven.
+
+To display a list of available build targets, execute `ant --projecthelp` in the overlay directory. 
 
 # Build
-To run the build
+
+* Set the `CATALINA_HOME` environment variable to point to the tomcat directory
+* Configure `common.properties`
+* Configure the appropriate environment filter (i.e. `localhost.properties`)
+* Execute `ant deploy`
