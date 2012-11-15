@@ -1,12 +1,12 @@
 # CAS Maven Overlay
-This is a sample Jasig CAS overlay. The build is based on CAS `3.5.1` and cas-addons `1.0.3` 
+This is a sample [Jasig CAS overlay](https://wiki.jasig.org/display/CASUM/Best+Practice+-+Setting+Up+CAS+Locally+using+the+Maven2+WAR+Overlay+Method). The build is based on CAS `3.5.1` and [cas-addons](https://github.com/Unicon/cas-addons) `1.0.3` 
 and features the following:
 
 * Support for JSON service registry with automatic reloads
 * Support for EhCache ticket registry with a two-node active-active setup
 * Support for Jasypt encryption/decryption of sensitive CAS settings
 * Support for Ldap authentication and attribute retrieval/release
-* Support for environment/tier specific builds through Maven filters
+* Support for environment/tier specific builds through [Apache Maven filters](http://maven.apache.org/shared/maven-filtering/)
 * Support for a _fully_ automated build
 
 # Requirements
@@ -67,7 +67,7 @@ targets are currently available:
 
 Default target: help
 ```
-## Strtucture
+## Structure
 The actual CAS Spring configuration are broken apart into the following files:
 
 * [`ehcache-replicated.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/ehcache-replicated.xml): Contains the EhCache ticket replication settings through RMI
@@ -80,7 +80,7 @@ The actual CAS Spring configuration are broken apart into the following files:
 * [`propertyFileConfigurer.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/propertyFileConfigurer.xml): Define a Jasypt enabled `EncryptablePropertyPlaceholderConfigurer`
 * [`log4j.xml`](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/classes/log4j.xml): Defines CAS logging configuration
 
-Note: You don't need to modify any of the files above, unless you are planning to extend the CAS behavior. Appropriate and relevant settings are abstracted and extracted out to environment filters. 
+*Note:* You don't need to modify any of the files above, unless you are planning to extend the CAS behavior. Appropriate and relevant settings are abstracted and extracted out to environment filters. 
 
 # Build
 
