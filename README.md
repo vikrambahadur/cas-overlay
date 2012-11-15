@@ -6,7 +6,7 @@ and features the following:
 * Support for JSON service registry with automatic reloads
 * Support for EhCache ticket registry with a two-node active-active setup
 * Support for encryption/decryption of sensitive CAS settings
-* Support for a fully automated build
+* Support for a _fully_ automated build
 
 Structure
 ========
