@@ -45,7 +45,7 @@ Though the build process is primarily controlled by Apache Maven, the actual scr
 done through Apache Ant:
 
 1. `pom.xml`: Apache Maven build descriptor; lists dependencies and versions.
-2. `build.xml`: Apache Ant bulid script; exposes various `target`s to invoke maven.
+2. `build.xml`: Apache Ant bulid script; exposes various targets to invoke maven.
 
 To display a list of available build targets, execute `ant -projecthelp` in the overlay directory. The following
 targets are currently available:
@@ -74,3 +74,7 @@ Default target: help
 * Configure `common.properties`
 * Configure the appropriate environment filter (i.e. `localhost.properties`)
 * Execute `ant deploy`
+* The build will list the available environment filters. It will then ask you for the environment name/id for which 
+CAS is to be deployed. 
+
+*Note:* You should execute the build from the command prompt with suffient privileges. 
