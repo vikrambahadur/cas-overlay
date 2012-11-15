@@ -10,9 +10,9 @@ and features the following:
 * Support for a _fully_ automated build
 
 # Requirements
-1. Apache Ant `1.8.2` and above
-2. Apache Maven `3.0.4` and above
-3. Apache Tomcat 6 or 7
+1. [Apache Ant](http://ant.apache.org/bindownload.cgi) `1.8.2` and above
+2. [Apache Maven](http://maven.apache.org/download.html) `3.0.4` and above
+3. [Apache Tomcat](http://tomcat.apache.org/) 6 or 7
 4. Java 6 or 7
 
 # Structure
@@ -20,15 +20,15 @@ and features the following:
 Maven filters which describe different settings specific to the build environment are defined inside the `filters`
 directory. The available filters currently are:
 
-* `common.properties`: describes settings common to all build environments
-* `node1.properties`: describes settings specific to the first CAS node
-* `node2.properties`: describes settings specific to the second CAS node
-* `localhost.properties`: describes settings specific to the current localhost dev environment
+* [`common.properties`](https://github.com/mmoayyed/cas-overlay/blob/master/filters/common.properties): describes settings common to all build environments
+* [`node1.properties`](https://github.com/mmoayyed/cas-overlay/blob/master/filters/node1.properties): describes settings specific to the first CAS node
+* [`node2.properties`](https://github.com/mmoayyed/cas-overlay/blob/master/filters/node2.properties): describes settings specific to the second CAS node
+* [`localhost.properties`](https://github.com/mmoayyed/cas-overlay/blob/master/filters/localhost.properties): describes settings specific to the current localhost dev environment
 
 Please refer to inline comments to understand purpose and intent of the available settings.
 
 ## Jasypt
-The `lib` folder contains the Jasypt CLI, used by the build process to encrypt/decrypt CAS settings that are specially
+The `lib` folder contains the [Jasypt CLI](http://www.jasypt.org/cli.html), used by the build process to encrypt/decrypt CAS settings that are specially
 decorated. You don't need to modify anything here, except when you possibly want to upgrade to the newer version of
 the Jasypt library. 
 
