@@ -10,9 +10,9 @@
 	<properties>
 		<cas.version>3.5.1</cas.version>
 		<apache.commons.pool.version>1.6</apache.commons.pool.version>
-    <cas.addons.version>1.0</cas.addons.version>
+        <cas.addons.version>1.0.3</cas.addons.version>
     
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
 	<build>

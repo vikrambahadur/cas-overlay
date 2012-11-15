@@ -13,17 +13,19 @@
 <project name="cas" default="deploy" basedir=".">
 
 	<!-- ******************* PROPERTIES ************************* -->
-	<property name="build.target.dir" value="target" />
-
 	<property environment="env" />
-
+	
+	<property name="build.target.dir" value="target" />
+	<property name="jasypt.bin.dir" value="${basedir}/lib/jasypt-1.9.0" />
 	<property name="catalina.home" value="${env.CATALINA_HOME}" />
-
+	
+	<!-- ******************* MAVEN ************************* -->
 	<condition property="mavenExecutableFile" value="mvn.bat" else="mvn">
 		<os family="windows" />
 	</condition>
 	<property name="mavenExecutable" value="${env.MAVEN_HOME}\bin\${mavenExecutableFile}" />
-
+	
+	<!-- ******************* TOMCAT ************************* -->
 	<condition property="tomcatStartupFile" value="startup.bat" else="startup">
 		<os family="windows" />
 	</condition>
@@ -33,9 +35,24 @@
 		<os family="windows" />
 	</condition>
 	<property name="tomcatShutDown" value="${catalina.home}\bin\${tomcatShutDownFile}" />
-		
+	
+	<!-- ******************* JASYPT ************************* -->
+	<condition property="jasyptEncryptExecutableFile" value="encrypt.bat" else="encrypt">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptEncryptExecutable" value="${jasypt.bin.dir}\bin\${jasyptEncryptExecutableFile}" />
+	
+	<condition property="jasyptDecryptExecutableFile" value="decrypt.bat" else="decrypt">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptDecryptExecutable" value="${jasypt.bin.dir}\bin\${jasyptDecryptExecutableFile}" />
+	
+	<condition property="jasyptListAlgorithmsExecutableFile" value="listAlgorithms.bat" else="listAlgorithms">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptListAlgorithmsExecutable" value="${jasypt.bin.dir}\bin\${jasyptListAlgorithmsExecutableFile}" />
+	
 	<!-- ******************************************************** -->
-
 	<target name="getMavenProfileIdForCAS">
 		<echo>A maven profile id is requied for this build. Profiles are defined such that proper filters and settings can be appropriately
 built for this instance of the CAS server. Profiles are defined inside the 'pom.xml' file. The name of the profile should match the 
@@ -106,7 +123,6 @@ filter property inside the 'filters' directory.
 			<arg value="-Denvironment=${cas.profile.id}" />
 			<arg value="-Dmaven.test.skip=true" />
 		</exec>
-		
 	</target>
 
 	<target name="deploy" depends="copy" description="Clean, package and deploy artifacts" />
@@ -118,8 +134,75 @@ filter property inside the 'filters' directory.
 	<target name="stopTomcat" description="Stop the tomcat server">
 		<exec dir="${catalina.home}" executable="${tomcatShutDown}" />
 	</target>
-
-
+	
+	<target name="jasypt-encrypt" description="Use Jasypt to encrypt a given string">
+		<input message="Input string to encrypt:" addproperty="jasypt.encrypt.arg.input"  />
+		<condition property="has.jasypt.arg.input">
+			<not>
+				<equals arg1="" arg2="${jasypt.encrypt.arg.input}" />
+			</not>
+		 </condition>
+		 <fail unless="${has.jasypt.arg.input}">Encryption input string cannot be blank.</fail>
+		 
+		<input message="Password (secret key) to encrypt the input string:" addproperty="jasypt.encrypt.arg.password" defaultvalue="jasypt" />
+		<condition property="has.jasypt.encrypt.arg.password">
+			<not>
+				<equals arg1="" arg2="${jasypt.encrypt.arg.password}" />
+			</not>
+		 </condition>
+		 <fail unless="${has.jasypt.encrypt.arg.password}">Encryption password cannot be blank.</fail>
+		 
+		<input message="Encryption algorithm:" addproperty="jasypt.encrypt.arg.alg" defaultvalue="PBEWITHSHA1ANDDESEDE"  />
+		<input message="Number of encryption iterations:" addproperty="jasypt.encrypt.arg.iter" defaultvalue="5"  />
+		<input message="Encryption output type [base64,hexadecimal]:" addproperty="jasypt.encrypt.arg.outputType" defaultvalue="base64"  />
+		
+		<exec dir="." executable="${jasyptEncryptExecutable}" >
+			<arg line="input=${jasypt.encrypt.arg.input}" />
+			<arg value="password=${jasypt.encrypt.arg.password}" />
+			<arg value="verbose=true" />
+			<arg value="algorithm=${jasypt.encrypt.arg.alg}" />
+			<arg value="keyObtentionIterations=${jasypt.encrypt.arg.iter}" />
+			<arg value="stringOutputType=${jasypt.encrypt.arg.outputType}" />
+		</exec>
+	</target>
+	
+	<target name="jasypt-decrypt" description="Use Jasypt to decrypt a given string">
+		<input message="Input string to decrypt:" addproperty="jasypt.decrypt.arg.input"  />
+		<condition property="has.jasypt.arg.input">
+			<not>
+				<equals arg1="" arg2="${jasypt.decrypt.arg.input}" />
+			</not>
+		 </condition>
+		 <fail unless="${has.jasypt.arg.input}">Decryption input string cannot be blank.</fail>
+		 
+		<input message="Password (secret key) to decrypt the input string:" addproperty="jasypt.decrypt.arg.password" defaultvalue="jasypt" />
+		<condition property="has.jasypt.decrypt.arg.password">
+			<not>
+				<equals arg1="" arg2="${jasypt.decrypt.arg.password}" />
+			</not>
+		 </condition>
+		 <fail unless="${has.jasypt.decrypt.arg.password}">Decryption password cannot be blank.</fail>
+		 
+		<input message="decryption algorithm:" addproperty="jasypt.decrypt.arg.alg" defaultvalue="PBEWITHSHA1ANDDESEDE"  />
+		<input message="Number of decryption iterations:" addproperty="jasypt.decrypt.arg.iter" defaultvalue="5"  />
+		<input message="decryption output type [base64,hexadecimal]:" addproperty="jasypt.decrypt.arg.outputType" defaultvalue="base64"  />
+		
+		<exec dir="." executable="${jasyptDecryptExecutable}" >
+			<arg line="input=${jasypt.decrypt.arg.input}" />
+			<arg value="password=${jasypt.decrypt.arg.password}" />
+			<arg value="verbose=true" />
+			<arg value="algorithm=${jasypt.decrypt.arg.alg}" />
+			<arg value="keyObtentionIterations=${jasypt.decrypt.arg.iter}" />
+			<arg value="stringOutputType=${jasypt.decrypt.arg.outputType}" />
+		</exec>
+	</target>
+	
+	<target name="jasypt-listalg" description="Use Jasypt for listing the digest and PBE encryption algorithms available in your JVM">
+		<exec dir="." executable="${jasyptListAlgorithmsExecutable}" >
+			<arg value="verbose=true" />
+		</exec>
+	</target>
+	
 	<target name="help" description="Prints instructions on how to run the build.">
 		<echo message="Use 'ant -projecthelp' to see all available commands" />
 	</target>
