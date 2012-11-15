@@ -40,7 +40,25 @@ done through Apache Ant:
 1. `pom.xml`: Apache Maven build descriptor; lists dependencies and versions.
 2. `build.xml`: Apache Ant bulid script; exposes various `target`s to invoke maven.
 
-To display a list of available build targets, execute `ant --projecthelp` in the overlay directory. 
+To display a list of available build targets, execute `ant -projecthelp` in the overlay directory. The following
+targets are currently available:
+
+```xml
+ clean            Clean deployed artifacts and logs
+ cleanTomcatLogs  Clean tomcat log files
+ copy             Copy artifacts over to tomcat
+ deploy           Clean, package and deploy artifacts
+ help             Prints instructions on how to run the build.
+ init             Copy all changes to tomcat and restart the service to deploy.
+ jasypt-decrypt   Use Jasypt to decrypt a given string
+ jasypt-encrypt   Use Jasypt to encrypt a given string
+ jasypt-listalg   Use Jasypt for listing the digest and PBE encryption algorithms available in your JVM
+ package          Package src artifacts and prepare for deployment
+ startTomcat      Start the tomcat server
+ stopTomcat       Stop the tomcat server
+
+Default target: help
+```
 
 # Build
 
