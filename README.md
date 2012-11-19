@@ -3,11 +3,11 @@ This is a sample [Jasig CAS overlay](https://wiki.jasig.org/display/CASUM/Best+P
 The build is based on CAS `3.5.1` and [cas-addons](https://github.com/Unicon/cas-addons) `1.0.4` 
 and features the following:
 
-* Support for JSON service registry with automatic reloads
-* Support for EhCache ticket registry with a two-node active-active setup
+* Support for [JSON service registry](https://github.com/Unicon/cas-addons/wiki/Configuring-JSON-Service-Registry) with automatic reloads
+* Support for [EhCache ticket registry](https://wiki.jasig.org/display/CASUM/EhcacheTicketRegistry) with a two-node active-active setup
 * Support for Jasypt encryption/decryption of sensitive CAS settings
 * Support for Ldap authentication and attribute retrieval/release
-* Support for ClearPass 
+* Support for [ClearPass](https://wiki.jasig.org/display/CASUM/ClearPass)
 * Support for environment/tier specific builds through [Apache Maven filters](http://maven.apache.org/shared/maven-filtering/)
 * Support for a _fully_ automated build
 
