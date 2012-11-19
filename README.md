@@ -1,5 +1,6 @@
 # CAS Maven Overlay
-This is a sample [Jasig CAS overlay](https://wiki.jasig.org/display/CASUM/Best+Practice+-+Setting+Up+CAS+Locally+using+the+Maven2+WAR+Overlay+Method). The build is based on CAS `3.5.1` and [cas-addons](https://github.com/Unicon/cas-addons) `1.0.3` 
+This is a sample [Jasig CAS overlay](https://wiki.jasig.org/display/CASUM/Best+Practice+-+Setting+Up+CAS+Locally+using+the+Maven2+WAR+Overlay+Method).
+The build is based on CAS `3.5.1` and [cas-addons](https://github.com/Unicon/cas-addons) `1.0.4` 
 and features the following:
 
 * Support for JSON service registry with automatic reloads
