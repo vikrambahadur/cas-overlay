@@ -37,11 +37,13 @@ the Jasypt library.
 The current version used is `1.9.0`.
 
 [A number of settings are decorated](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/cas.properties#L114) using the Jasypt special `ENC` modifier. You may use the appropriate build target
-to provide the encrypted value for the setting. To allow CAS to decrypt the password at runtime, set the environment
-variable `CAS_JASYPT_ENC_PASSWORD` to the encryption password. At a minimum, you should provide an encrypted password
-for the setting `cas.ldap.manager.psw`:
+to provide the encrypted value for the setting. 
+
+At a minimum, you should provide an encrypted password for the setting `cas.ldap.manager.psw`:
 
 `cas.ldap.manager.psw = SRls87Kn7W3stoH/98WP6g==`
+
+[See this configuration file](https://github.com/mmoayyed/cas-overlay/blob/master/src/main/webapp/WEB-INF/spring-configuration/propertyFileConfigurer.xml) for more info.
 
 ## Build script
 Though the build process is primarily controlled by Apache Maven, the actual script that invokes the Maven build is
@@ -88,7 +90,7 @@ The actual CAS Spring configuration are broken apart into the following files:
 
 * Set the `CATALINA_HOME` environment variable to point to the tomcat directory
 * Set the `MAVEN_HOME` and `ANT_HOME` environment variables 
-* Set the `CAS_JASYPT_ENC_PASSWORD` environment variable to the encryption password used
+* Configure Jasypt with the appropriate JVM/Environment variable for the encryption password
 * Configure `common.properties`
 * Configure the appropriate environment filter (i.e. `localhost.properties`)
 * Execute `ant deploy`

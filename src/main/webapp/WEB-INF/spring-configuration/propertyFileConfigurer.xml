@@ -34,7 +34,20 @@
 	<!-- Configuration for encryptor, based on environment variables. -->
 	<bean id="environmentVariablesConfiguration" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 		<property name="algorithm" value="${cas.jasypt.encryption.config.algorithm}" />
-		<property name="passwordEnvName" value="CAS_JASYPT_ENC_PASSWORD" />
+    
+    <!-- 
+      Use a JVM variable to define the name of the pamarater that holds the encryption password:
+    -->
+    <property name="passwordSysPropertyName" value="cas.jasypt.enc.password" />
+    <!-- 
+      To use an environment variable to hold the encryption password:
+      <property name="passwordEnvName" value="CAS_JASYPT_ENC_PASSWORD" /> 
+    -->
+    <!-- 
+      To directly provide the encryption password:
+      <property name="password" value="somePasswordValueUsedByJasyptEncryption" /> 
+      You should NOT enable this block! This should only be used for dev/test purposes.
+    -->
 		<property name="keyObtentionIterations" value="${cas.jasypt.encryption.config.key.iterations}" />
 		<property name="stringOutputType" value="${cas.jasypt.encryption.config.output.type}" />
 	</bean>
