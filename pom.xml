@@ -10,7 +10,7 @@
 	<properties>
 		<cas.version>3.5.1</cas.version>
 		<apache.commons.pool.version>1.6</apache.commons.pool.version>
-        	<cas.addons.version>1.0.4</cas.addons.version>
+        	<cas.addons.version>1.0.5</cas.addons.version>
 		<jasypt.version>1.9.0</jasypt.version>
 	
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
