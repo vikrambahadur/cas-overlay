@@ -10,9 +10,10 @@
 	<properties>
 		<cas.version>3.5.1</cas.version>
 		<apache.commons.pool.version>1.6</apache.commons.pool.version>
-        	<cas.addons.version>1.0.4</cas.addons.version>
+    <cas.addons.version>1.0.5</cas.addons.version>
 		<jasypt.version>1.9.0</jasypt.version>
-	
+    
+    <maven.properties.config.file>build/pom.properties</maven.properties.config.file>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	
@@ -50,6 +51,25 @@
 					<warName>cas</warName>
 				</configuration>
 			</plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>properties-maven-plugin</artifactId>
+        <version>1.0-alpha-2</version>
+        <executions>
+          <execution>
+            <phase>initialize</phase>
+            <goals>
+              <goal>read-project-properties</goal>
+            </goals>
+            <configuration>
+              <files>
+                <file>${maven.properties.config.file}</file>
+              </files>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
 
