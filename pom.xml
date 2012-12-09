@@ -9,13 +9,21 @@
 
 	<properties>
 		<cas.version>3.5.1</cas.version>
-		<apache.commons.pool.version>1.6</apache.commons.pool.version>
-    <cas.addons.version>1.0.5</cas.addons.version>
+    	<cas.addons.version>1.0.5</cas.addons.version>
+    
+    	<apache.commons.pool.version>1.6</apache.commons.pool.version>
 		<jasypt.version>1.9.0</jasypt.version>
     
-    <maven.properties.config.file>build/pom.properties</maven.properties.config.file>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    
+    	<maven.properties.config.file>build/pom.properties</maven.properties.config.file>
+    
+    	<maven.war.plugin.version>2.3</maven.war.plugin.version>
+   		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
+   		
+   		<environment>localhost</environment>
 	</properties>
+	
 	
 	<build>
 		<filters>
@@ -23,14 +31,22 @@
 		</filters>
 
 		<plugins>
+			
 			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.2</version>
+								
 				<configuration>
+					<warName>cas</warName>
+					<warSourceExcludes>**/spring-configuration/propertyFileConfigurer.xml</warSourceExcludes>
+					
 					<webResources>
 						<resource>
 							<directory>src/main/webapp/WEB-INF</directory>
 							<targetPath>WEB-INF</targetPath>
+							<excludes>
+								<exclude>**/spring-configuration/propertyFileConfigurer.xml</exclude>
+							</excludes>
 							<includes>
 								<include>**/*.xml</include>
 								<include>**/*.properties</include>
@@ -45,32 +61,45 @@
 								<include>**/*conf</include>
 							</includes>
 							<filtering>false</filtering>
+							
 						</resource>
             
-					</webResources>
-					<warName>cas</warName>
+					</webResources>			
 				</configuration>
 			</plugin>
       
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>properties-maven-plugin</artifactId>
-        <version>1.0-alpha-2</version>
-        <executions>
-          <execution>
-            <phase>initialize</phase>
-            <goals>
-              <goal>read-project-properties</goal>
-            </goals>
-            <configuration>
-              <files>
-                <file>${maven.properties.config.file}</file>
-              </files>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+      
+			<plugin>
+			  <groupId>org.codehaus.mojo</groupId>
+			  <artifactId>properties-maven-plugin</artifactId>
+			  <version>${maven.properties.plugin.version}</version>
+			  <executions>
+			    <execution>
+			      <phase>initialize</phase>
+			      <goals>
+			        <goal>read-project-properties</goal>
+			      </goals>
+			      <configuration>
+			        <files>
+			          <file>${maven.properties.config.file}</file>
+			        </files>
+			      </configuration>
+			    </execution>
+			  </executions>
+			</plugin>
 		</plugins>
+		
+		<pluginManagement>
+			<plugins>
+				
+				<plugin>
+	        		<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>${maven.war.plugin.version}</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
 	</build>
 
 	<dependencies>
@@ -218,5 +247,6 @@
 				</filters>
 			</build>
 		</profile>
+				
 	</profiles>
 </project>

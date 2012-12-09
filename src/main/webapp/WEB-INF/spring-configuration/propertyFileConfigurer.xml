@@ -11,7 +11,7 @@
 
       http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
+Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     KIND, either express or implied.  See the License for the
@@ -36,7 +36,7 @@
 		<property name="algorithm" value="${cas.jasypt.encryption.config.algorithm}" />
     
     <!-- 
-      Use a JVM variable to define the name of the pamarater that holds the encryption password:
+      Use a JVM variable to define the name of the parameter that holds the encryption password:
     -->
     <property name="passwordSysPropertyName" value="cas.jasypt.enc.password" />
     <!-- 
@@ -62,7 +62,7 @@
 	   <constructor-arg ref="configurationEncryptor" />
 	   <property name="locations">
 		 <list>
-		   <value>/WEB-INF/cas.properties</value>
+		   <value>${cas.properties.file}</value>
 		 </list>
 	   </property>   
 	</bean>
