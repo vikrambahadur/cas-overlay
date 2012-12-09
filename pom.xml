@@ -9,51 +9,47 @@
 
 	<properties>
 		<cas.version>3.5.1</cas.version>
-    	<cas.addons.version>1.0.5</cas.addons.version>
-    
-    	<apache.commons.pool.version>1.6</apache.commons.pool.version>
+		<cas.addons.version>1.0.5</cas.addons.version>
+
+		<apache.commons.pool.version>1.6</apache.commons.pool.version>
 		<jasypt.version>1.9.0</jasypt.version>
-    
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    
-    	<maven.properties.config.file>build/pom.properties</maven.properties.config.file>
-    
-    	<maven.war.plugin.version>2.3</maven.war.plugin.version>
-   		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
-   		
-   		<environment>localhost</environment>
+
+		<maven.properties.config.file>build/pom.properties</maven.properties.config.file>
+
+		<maven.war.plugin.version>2.3</maven.war.plugin.version>
+		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
+
+		<environment>localhost</environment>
 	</properties>
-	
-	
+
+
 	<build>
 		<filters>
 			<filter>filters/common.properties</filter>
 		</filters>
 
 		<plugins>
-			
+
 			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-								
+
 				<configuration>
-					<warName>cas</warName>
-					<warSourceExcludes>**/spring-configuration/propertyFileConfigurer.xml</warSourceExcludes>
-					
+					<warName>cas</warName>				
+
 					<webResources>
 						<resource>
 							<directory>src/main/webapp/WEB-INF</directory>
 							<targetPath>WEB-INF</targetPath>
-							<excludes>
-								<exclude>**/spring-configuration/propertyFileConfigurer.xml</exclude>
-							</excludes>
 							<includes>
 								<include>**/*.xml</include>
 								<include>**/*.properties</include>
 							</includes>
 							<filtering>true</filtering>
 						</resource>
-            
+
 						<resource>
 							<directory>${basedir}/opt</directory>
 							<targetPath>opt</targetPath>
@@ -61,39 +57,39 @@
 								<include>**/*conf</include>
 							</includes>
 							<filtering>false</filtering>
-							
+
 						</resource>
-            
-					</webResources>			
+
+					</webResources>
 				</configuration>
 			</plugin>
-      
-      
+
+
 			<plugin>
-			  <groupId>org.codehaus.mojo</groupId>
-			  <artifactId>properties-maven-plugin</artifactId>
-			  <version>${maven.properties.plugin.version}</version>
-			  <executions>
-			    <execution>
-			      <phase>initialize</phase>
-			      <goals>
-			        <goal>read-project-properties</goal>
-			      </goals>
-			      <configuration>
-			        <files>
-			          <file>${maven.properties.config.file}</file>
-			        </files>
-			      </configuration>
-			    </execution>
-			  </executions>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>${maven.properties.plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>${maven.properties.config.file}</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-		
+
 		<pluginManagement>
 			<plugins>
-				
+
 				<plugin>
-	        		<groupId>org.apache.maven.plugins</groupId>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
 					<version>${maven.war.plugin.version}</version>
 				</plugin>
@@ -108,53 +104,53 @@
 			<artifactId>cas-addons</artifactId>
 			<version>${cas.addons.version}</version>
 			<exclusions>
-			  <exclusion>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>org.jasig.cas.client</groupId>
-				<artifactId>cas-client-core</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>commons-codec</groupId>
-				<artifactId>commons-codec</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>org.slf4j</groupId>
-				<artifactId>jcl-over-slf4j</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>org.jdom</groupId>
-				<artifactId>jdom</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>net.sf.ezmorph</groupId>
-				<artifactId>ezmorph</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>org.codehaus.jettison</groupId>
-				<artifactId>jettison</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>javax.xml.stream</groupId>
-				<artifactId>stax-api</artifactId>
-			  </exclusion>
-			  <exclusion>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-api</artifactId>
-			  </exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jasig.cas.client</groupId>
+					<artifactId>cas-client-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>commons-beanutils</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.jdom</groupId>
+					<artifactId>jdom</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.sf.ezmorph</groupId>
+					<artifactId>ezmorph</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jettison</groupId>
+					<artifactId>jettison</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.xml.stream</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-webapp</artifactId>
@@ -169,7 +165,7 @@
 			<version>${cas.version}</version>
 			<scope>compile</scope>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-extension-clearpass</artifactId>
@@ -189,42 +185,42 @@
 			<version>${cas.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
 
-		
+
+
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-integration-ehcache</artifactId>
 			<version>${cas.version}</version>
 			<scope>compile</scope>
 		</dependency>
-   
+
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
 			<version>${apache.commons.pool.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-support-generic</artifactId>
 			<version>${cas.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
-		  <groupId>org.jasypt</groupId>
-		  <artifactId>jasypt</artifactId>
-		  <version>${jasypt.version}</version>
-		  <scope>runtime</scope>
+			<groupId>org.jasypt</groupId>
+			<artifactId>jasypt</artifactId>
+			<version>${jasypt.version}</version>
+			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
-		  <groupId>org.jasypt</groupId>
-		  <artifactId>jasypt-spring31</artifactId>
-		  <version>${jasypt.version}</version>
-		  <scope>runtime</scope>
+			<groupId>org.jasypt</groupId>
+			<artifactId>jasypt-spring31</artifactId>
+			<version>${jasypt.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
@@ -247,6 +243,55 @@
 				</filters>
 			</build>
 		</profile>
-				
+
+		<profile>
+			<id>disableJasyptProfileId</id>
+			<activation>
+				<property>
+					<name>jasypt</name>
+					<value>false</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+
+						<configuration>
+							<warName>cas</warName>
+							<warSourceExcludes>**/spring-configuration/propertyFileConfigurer.xml</warSourceExcludes>
+
+							<webResources>
+								<resource>
+									<directory>src/main/webapp/WEB-INF</directory>
+									<targetPath>WEB-INF</targetPath>
+									<excludes>
+										<exclude>**/spring-configuration/propertyFileConfigurer.xml</exclude>
+									</excludes>
+									<includes>
+										<include>**/*.xml</include>
+										<include>**/*.properties</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+
+								<resource>
+									<directory>${basedir}/opt</directory>
+									<targetPath>opt</targetPath>
+									<includes>
+										<include>**/*conf</include>
+									</includes>
+									<filtering>false</filtering>
+
+								</resource>
+
+							</webResources>
+						</configuration>
+					</plugin>
+				</plugins>
+
+			</build>
+		</profile>
 	</profiles>
 </project>
