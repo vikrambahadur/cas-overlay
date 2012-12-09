@@ -35,18 +35,23 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-
+				
 				<configuration>
 					<warName>cas</warName>				
-
+					<warSourceExcludes>${maven.war.plugin.war.source.excludes}</warSourceExcludes>
 					<webResources>
 						<resource>
 							<directory>src/main/webapp/WEB-INF</directory>
 							<targetPath>WEB-INF</targetPath>
+							
+							<excludes>
+								<exclude>${maven.war.plugin.resource.excludes.propFileConfigurer}</exclude>
+							</excludes>
 							<includes>
 								<include>**/*.xml</include>
 								<include>**/*.properties</include>
 							</includes>
+							
 							<filtering>true</filtering>
 						</resource>
 
@@ -246,52 +251,14 @@
 
 		<profile>
 			<id>disableJasyptProfileId</id>
-			<activation>
-				<property>
-					<name>jasypt</name>
-					<value>false</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-war-plugin</artifactId>
-
-						<configuration>
-							<warName>cas</warName>
-							<warSourceExcludes>**/spring-configuration/propertyFileConfigurer.xml</warSourceExcludes>
-
-							<webResources>
-								<resource>
-									<directory>src/main/webapp/WEB-INF</directory>
-									<targetPath>WEB-INF</targetPath>
-									<excludes>
-										<exclude>**/spring-configuration/propertyFileConfigurer.xml</exclude>
-									</excludes>
-									<includes>
-										<include>**/*.xml</include>
-										<include>**/*.properties</include>
-									</includes>
-									<filtering>true</filtering>
-								</resource>
-
-								<resource>
-									<directory>${basedir}/opt</directory>
-									<targetPath>opt</targetPath>
-									<includes>
-										<include>**/*conf</include>
-									</includes>
-									<filtering>false</filtering>
-
-								</resource>
-
-							</webResources>
-						</configuration>
-					</plugin>
-				</plugins>
-
-			</build>
+			<properties>
+				<maven.war.plugin.war.source.excludes>
+					**/spring-configuration/propertyFileConfigurer.xml
+				</maven.war.plugin.war.source.excludes>
+				<maven.war.plugin.resource.excludes.propFileConfigurer>
+					**/spring-configuration/propertyFileConfigurer.xml
+				</maven.war.plugin.resource.excludes.propFileConfigurer>
+			</properties>
 		</profile>
 	</profiles>
 </project>

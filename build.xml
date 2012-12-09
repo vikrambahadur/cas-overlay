@@ -101,7 +101,7 @@ filter property inside the 'filters' directory.
 	</target>
 
 	<target name="getIsJasyptEnabledForCAS">
-		<input message="Is Jasypt password encryption enabled (yes/no)? " addproperty="jasypt.profile.id" defaultvalue="no" />
+		<input message="Is Jasypt password encryption disabled (yes/no)? " addproperty="disabled.jasypt.profile.id" defaultvalue="yes" />
 	</target>
 
 	<target name="cleanTomcatLogs" description="Clean tomcat log files">
@@ -132,21 +132,29 @@ filter property inside the 'filters' directory.
 	        depends="clean,getMavenProfileIdForCAS,getIsJasyptEnabledForCAS">
 		<echo message="Building CAS based on maven profile ${cas.profile.id}..." />
 		
-		<condition property="enabled.jasypt.profile.id" value="false" else="true">
+		<condition property="jasypt.profile.id" value="disableJasyptProfileId" else="">
 			<or>
-				<equals arg1="no" arg2="${jasypt.profile.id}" />
-				<equals arg1="No" arg2="${jasypt.profile.id}" />
-				<equals arg1="N" arg2="${jasypt.profile.id}" />
-				<equals arg1="n" arg2="${jasypt.profile.id}" />
+				<equals arg1="yes" arg2="${disabled.jasypt.profile.id}" />
+				<equals arg1="Yes" arg2="${disabled.jasypt.profile.id}" />
+				<equals arg1="Y" arg2="${disabled.jasypt.profile.id}" />
+				<equals arg1="y" arg2="${disabled.jasypt.profile.id}" />
 			</or>
 		</condition>
-		<echo>Jasypt encryption enabled for this build? => ${enabled.jasypt.profile.id}</echo>
-	
+		
+		<condition property="msg.jasypt.profile.id" value="Enabled the build profile [${jasypt.profile.id}] to turn on Jasypt encryption."
+				   else="Jasypt encryption is disabled for this build.">
+			<not>
+				<equals arg1="" arg2="${jasypt.profile.id}"/>
+			</not>
+		</condition>
+		<echo>${msg.jasypt.profile.id}</echo>
+				
 		<exec dir="." executable="${mavenExecutable}">
 			<arg value="clean" />
 			<arg value="package" />
-			<arg value="-Djasypt=${enabled.jasypt.profile.id}" />
-			<arg value="-Denvironment=${cas.profile.id}" />
+			<arg value="-PbuildProfileId,${jasypt.profile.id}" />
+							
+			<arg value="-Denvironment=${cas.profile.id}" />	
 			<arg value="-Dmaven.test.skip=true" />
 		</exec>
 	</target>
