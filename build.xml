@@ -101,7 +101,7 @@ filter property inside the 'filters' directory.
 	</target>
 
 	<target name="getIsJasyptEnabledForCAS">
-		<input message="Is Jasypt password encryption enabled? " addproperty="jasypt.profile.id" defaultvalue="yes" />
+		<input message="Is Jasypt password encryption enabled (yes/no)? " addproperty="jasypt.profile.id" defaultvalue="no" />
 	</target>
 
 	<target name="cleanTomcatLogs" description="Clean tomcat log files">
@@ -132,20 +132,20 @@ filter property inside the 'filters' directory.
 	        depends="clean,getMavenProfileIdForCAS,getIsJasyptEnabledForCAS">
 		<echo message="Building CAS based on maven profile ${cas.profile.id}..." />
 		
-		<condition property="enabled.jasypt.profile.id"  value="jasyptProfileId" else="">
+		<condition property="enabled.jasypt.profile.id" value="false" else="true">
 			<or>
-				<equals arg1="yes" arg2="${jasypt.profile.id}" />
-				<equals arg1="Yes" arg2="${jasypt.profile.id}" />
-				<equals arg1="Y" arg2="${jasypt.profile.id}" />
-				<equals arg1="y" arg2="${jasypt.profile.id}" />
+				<equals arg1="no" arg2="${jasypt.profile.id}" />
+				<equals arg1="No" arg2="${jasypt.profile.id}" />
+				<equals arg1="N" arg2="${jasypt.profile.id}" />
+				<equals arg1="n" arg2="${jasypt.profile.id}" />
 			</or>
 		</condition>
-		<echo>Jasypt build profile id to use: ${enabled.jasypt.profile.id}</echo>
+		<echo>Jasypt encryption enabled for this build? => ${enabled.jasypt.profile.id}</echo>
 	
 		<exec dir="." executable="${mavenExecutable}">
 			<arg value="clean" />
 			<arg value="package" />
-			<arg value="-P${enabled.jasypt.profile.id}" />
+			<arg value="-Djasypt=${enabled.jasypt.profile.id}" />
 			<arg value="-Denvironment=${cas.profile.id}" />
 			<arg value="-Dmaven.test.skip=true" />
 		</exec>
