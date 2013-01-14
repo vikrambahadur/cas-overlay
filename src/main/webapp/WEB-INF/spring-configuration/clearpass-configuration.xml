@@ -69,12 +69,15 @@
     </property>
   </bean>
 
-  <!-- Security configuration -->
+  <!-- Security configuration 
+       Removed casAuthenticationFilter from the filters to disallow clearPass from rendering 
+       the user's password simply by accessing /clearPass
+  -->
   <bean id="clearPassFilterChainProxy" class="org.springframework.security.web.FilterChainProxy">
     <sec:filter-chain-map request-matcher="ant">
       <sec:filter-chain pattern="/clearPass"
-                        filters="casAuthenticationFilter,casValidationFilter,httpServletRequestWrappingFilter"/>
-    </sec:filter-chain-map>
+                        filters="casValidationFilter,httpServletRequestWrappingFilter"/>
+      </sec:filter-chain-map>
   </bean>
 
   <bean id="casAuthenticationFilter" class="org.jasig.cas.client.authentication.AuthenticationFilter">

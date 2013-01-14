@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-buildEhCacheProfiles" basedir=".">
+
+	<target name="getIsEhCacheEnabledForCAS">
+		<input message="Is EhCache ticket registry disabled (yes/no)? " addproperty="disabled.ehcache.profile.id" defaultvalue="yes" />
+	</target>
+  
+</project>
+

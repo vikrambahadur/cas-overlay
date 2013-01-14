@@ -17,10 +17,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<maven.properties.config.file>build/pom.properties</maven.properties.config.file>
-
+    
+    <maven.antrun.plugin.version>1.7</maven.antrun.plugin.version>
 		<maven.war.plugin.version>2.3</maven.war.plugin.version>
 		<maven.properties.plugin.version>1.0-alpha-2</maven.properties.plugin.version>
-
+    <maven.replacer.plugin.version>1.5.2</maven.replacer.plugin.version>
+    
 		<environment>localhost</environment>
 	</properties>
 
@@ -31,49 +33,129 @@
 		</filters>
 
 		<plugins>
-
-			<plugin>
+      
+      <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				
-				<configuration>
-					<warName>cas</warName>				
-					<warSourceExcludes>${maven.war.plugin.war.source.excludes}</warSourceExcludes>
-					<webResources>
-						<resource>
-							<directory>src/main/webapp/WEB-INF</directory>
-							<targetPath>WEB-INF</targetPath>
-							
-							<excludes>
-								<exclude>${maven.war.plugin.resource.excludes.propFileConfigurer}</exclude>
-							</excludes>
-							<includes>
-								<include>**/*.xml</include>
-								<include>**/*.properties</include>
-							</includes>
-							
-							<filtering>true</filtering>
-						</resource>
+        <configuration>	
+          <warName>${project.artifactId}</warName>
+          <warSourceExcludes>
+            ${maven.war.plugin.resource.excludes.propFileConfigurer},
+            ${maven.war.plugin.resource.excludes.ehCacheFileConfig},
+            ${maven.war.plugin.resource.excludes.ldapAuthFileConfig},
+            ${maven.war.plugin.resource.excludes.ticketRegistryFileConfig}
+          </warSourceExcludes>
+          <webResources>
+            <resource>
+              <directory>src/main/webapp/WEB-INF</directory>
+              <targetPath>WEB-INF</targetPath>
+              
+              <excludes>
+                <exclude>${maven.war.plugin.resource.excludes.propFileConfigurer}</exclude>
+                <exclude>${maven.war.plugin.resource.excludes.ehCacheFileConfig}</exclude>
+                <exclude>${maven.war.plugin.resource.excludes.ticketRegistryFileConfig}</exclude>
+                <exclude>${maven.war.plugin.resource.excludes.ldapAuthFileConfig}</exclude>
+              </excludes>
+              <includes>
+                <include>**/*.xml</include>
+                <include>**/*.properties</include>
+              </includes>
+              
+              <filtering>true</filtering>
+            </resource>
 
-						<resource>
-							<directory>${basedir}/opt</directory>
-							<targetPath>opt</targetPath>
-							<includes>
-								<include>**/*conf</include>
-							</includes>
-							<filtering>false</filtering>
-
-						</resource>
-
-					</webResources>
-				</configuration>
+            <resource>
+              <directory>${basedir}/opt</directory>
+              <targetPath>opt</targetPath>
+              <includes>
+                <include>**/*conf</include>
+              </includes>
+              <filtering>false</filtering>
+            </resource>
+          </webResources>
+        </configuration>
 			</plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copyingTemplateResourcesToBuildId</id>
+            <phase>compile</phase>
+            <configuration>
+              <target>
+                <echo message="Copying template resources to the build configuration" />
 
+                <copy file="${template.file.deployer.config.context}" overwrite="true" force="true" verbose="true"
+                      tofile="${overlay.file.deployer.config.context}" failonerror="true" />
 
+                <copy file="${template.file.attributes.config}" overwrite="true" force="true" verbose="true"
+                      tofile="${overlay.file.attributes.config}" failonerror="true" />
+              </target>
+
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+          
+          <execution>
+            <id>removingCopiedResourcesFromBuildId</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <echo message="Removing copied templates from the build" />
+                <delete file="${overlay.file.deployer.config.context}" failonerror="true" />
+                <delete file="${overlay.file.attributes.config}" failonerror="true" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <executions>
+            <execution>
+              <id>deployerConfigContextExec</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                  <file>src/main/webapp/WEB-INF/deployerConfigContext.xml</file>
+                  <regex>false</regex>
+                  <token>$authenticationHandlerConfiguration$</token>
+                  <valueFile>${maven.replacer.plugin.authenticationHandlerFileConfig}</valueFile> 
+                  <quiet>false</quiet>
+              </configuration>
+              <goals>
+                <goal>replace</goal>
+              </goals>
+            </execution>
+            
+            <execution>
+              <id>attributesRepositoryExec</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                  <file>src/main/webapp/WEB-INF/spring-configuration/attributes-configuration.xml</file>
+                  <regex>false</regex>
+                  <token>$attributeRepositoryConfiguration$</token>
+                  <valueFile>${maven.replacer.plugin.attributeRepositoryFileConfig}</valueFile>
+                  <quiet>false</quiet>
+              </configuration>
+              <goals>
+                <goal>replace</goal>
+              </goals>
+            </execution>
+        </executions>
+      </plugin>
+     
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>properties-maven-plugin</artifactId>
-				<version>${maven.properties.plugin.version}</version>
 				<executions>
 					<execution>
 						<phase>initialize</phase>
@@ -99,6 +181,24 @@
 					<version>${maven.war.plugin.version}</version>
 				</plugin>
 
+        <plugin>
+          <groupId>com.google.code.maven-replacer-plugin</groupId>
+          <artifactId>replacer</artifactId>
+          <version>${maven.replacer.plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>${maven.antrun.plugin.version}</version>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>properties-maven-plugin</artifactId>
+          <version>${maven.properties.plugin.version}</version>
+        </plugin>
+        
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -191,8 +291,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-
-
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-integration-ehcache</artifactId>
@@ -252,13 +350,75 @@
 		<profile>
 			<id>disableJasyptProfileId</id>
 			<properties>
-				<maven.war.plugin.war.source.excludes>
-					**/spring-configuration/propertyFileConfigurer.xml
-				</maven.war.plugin.war.source.excludes>
 				<maven.war.plugin.resource.excludes.propFileConfigurer>
 					**/spring-configuration/propertyFileConfigurer.xml
-				</maven.war.plugin.resource.excludes.propFileConfigurer>
+				</maven.war.plugin.resource.excludes.propFileConfigurer>							
 			</properties>
 		</profile>
+		
+		<profile>
+			<id>disableEhCacheProfileId</id>
+			<properties>
+				<maven.war.plugin.resource.excludes.ehCacheFileConfig>
+					**/ehcache-replicated.xml
+				</maven.war.plugin.resource.excludes.ehCacheFileConfig>
+        
+        <maven.war.plugin.resource.excludes.ticketRegistryFileConfig>
+          **/ticketRegistry.xml
+        </maven.war.plugin.resource.excludes.ticketRegistryFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
+			<id>simpleTestUsernamePasswordAuthProfileId</id>
+			<properties>
+				<maven.war.plugin.resource.excludes.ldapAuthFileConfig>
+					**/ldap-configuration.xml
+				</maven.war.plugin.resource.excludes.ldapAuthFileConfig>
+        <maven.replacer.plugin.authenticationHandlerFileConfig>
+          config/authentication/simpleTestUsernamePassword.xml
+        </maven.replacer.plugin.authenticationHandlerFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
+			<id>acceptUsersAuthProfileId</id>
+			<properties>
+				<maven.war.plugin.resource.excludes.ldapAuthFileConfig>
+					**/ldap-configuration.xml
+				</maven.war.plugin.resource.excludes.ldapAuthFileConfig>
+        <maven.replacer.plugin.authenticationHandlerFileConfig>
+          config/authentication/acceptUsers.xml
+        </maven.replacer.plugin.authenticationHandlerFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
+			<id>bindLdapProfileId</id>
+			<properties>
+        <maven.replacer.plugin.authenticationHandlerFileConfig>
+          config/authentication/bindLdap.xml
+        </maven.replacer.plugin.authenticationHandlerFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
+			<id>ldapAttrRepoProfileId</id>
+			<properties>
+        <maven.replacer.plugin.attributeRepositoryFileConfig>
+          config/attributes/ldap.xml
+        </maven.replacer.plugin.attributeRepositoryFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
+			<id>stubAttrRepoProfileId</id>
+			<properties>
+        <maven.replacer.plugin.attributeRepositoryFileConfig>
+          config/attributes/stub.xml
+        </maven.replacer.plugin.attributeRepositoryFileConfig>
+			</properties>
+		</profile>
+    
 	</profiles>
 </project>

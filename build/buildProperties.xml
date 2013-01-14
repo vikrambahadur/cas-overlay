@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cas-properties">
+
+	<property environment="env" />
+
+	<property name="build.target.dir" value="target" />
+	<property file="${basedir}/filters/common.properties" />
+
+	<property name="jasypt.bin.dir" value="${basedir}/lib/jasypt-1.9.0" />
+
+	<property name="catalina.home" value="${env.CATALINA_HOME}" />
+
+</project>
+

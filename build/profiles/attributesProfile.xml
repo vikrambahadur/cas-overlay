@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-attrProfiles" basedir=".">
+
+  <target name="getAttributesConfigProfileIdForCAS">
+		<echo>An attribute repository configuration profile id is requied for this build.</echo>
+
+		<fileset id="build.attributes.profiles.fileset" dir="config/attributes" casesensitive="false">
+			<patternset>
+				<include name="**/*.xml" />
+			</patternset>
+		</fileset>
+		<property name="build.attributes.available.profiles" refid="build.attributes.profiles.fileset" />
+		<echo message="${build.attributes.available.profiles}" file="${build.target.dir}/attrprofiles.tmp" />
+
+		<replace file="${build.target.dir}/attrprofiles.tmp" value="${line.separator}">
+			<replacefilter>
+				<replacetoken>.xml</replacetoken>
+				<replacevalue />
+			</replacefilter>
+			<replacetoken>;</replacetoken>
+		</replace>
+
+		<loadfile srcFile="${build.target.dir}/attrprofiles.tmp" property="build.attributes.profile.ids" />
+		<delete file="${build.target.dir}/attrprofiles.tmp" quiet="true" deleteonexit="true" />
+
+		<echo />
+		<echo>Available attributes profile ids for this build are:</echo>
+		<echo message="${build.attributes.profile.ids}" />
+
+		<input message="What attribute repository profile id do you want to use? " addproperty="cas.attributes.profile.id" defaultvalue="stub" />
+		<condition property="has.cas.attributes.profile.id">
+			<not>
+				<equals arg1="" arg2="${cas.attributes.profile.id}" />
+			</not>
+		</condition>
+		<fail unless="${has.cas.attributes.profile.id}">CAS attributes profile id cannot be blank.</fail>
+
+		<available file="config/attributes/${cas.attributes.profile.id}.xml" property="exists.cas.attributes.profile.id" />
+		<fail unless="${exists.cas.attributes.profile.id}">attributes configuration file does not exist for the given profile id.</fail>
+	</target>
+
+</project>
+

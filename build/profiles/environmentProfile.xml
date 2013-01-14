@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-environmentProfile" basedir=".">
+
+	<target name="getMavenProfileIdForCAS">
+		<echo>A maven profile id is requied for this build. Profiles are defined such that proper filters and settings can be appropriately
+built for this instance of the CAS server. Profiles are defined inside the 'pom.xml' file. The name of the profile should match the 
+filter property inside the 'filters' directory.
+		</echo>
+
+		<fileset id="build.profiles.fileset" dir="filters" casesensitive="false">
+			<patternset>
+				<include name="**/*.properties" />
+				<exclude name="**/common.properties" />
+			</patternset>
+		</fileset>
+		<property name="build.available.profiles" refid="build.profiles.fileset" />
+		<echo message="${build.available.profiles}" file="${build.target.dir}/profiles.tmp" />
+
+		<replace file="${build.target.dir}/profiles.tmp" value="${line.separator}">
+			<replacefilter>
+				<replacetoken>.properties</replacetoken>
+				<replacevalue />
+			</replacefilter>
+			<replacetoken>;</replacetoken>
+		</replace>
+
+		<loadfile srcFile="${build.target.dir}/profiles.tmp" property="build.profile.ids" />
+		<delete file="${build.target.dir}/profiles.tmp" quiet="true" deleteonexit="true" />
+
+		<echo />
+		<echo>Available profile ids for this build are:</echo>
+		<echo message="${build.profile.ids}" />
+
+		<input message="What profile id do you want to use? " addproperty="cas.profile.id" defaultvalue="localhost" />
+		<condition property="has.cas.profile.id">
+			<not>
+				<equals arg1="" arg2="${cas.profile.id}" />
+			</not>
+		</condition>
+		<fail unless="${has.cas.profile.id}">CAS Maven profile id cannot be blank.</fail>
+
+		<available file="filters/${cas.profile.id}.properties" property="exists.cas.profile.id" />
+		<fail unless="${exists.cas.profile.id}">Maven filter property file does not exist for the given profile id.</fail>
+	</target>
+
+
+</project>
+

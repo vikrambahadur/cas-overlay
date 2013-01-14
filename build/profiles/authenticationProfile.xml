@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-authnProfiles" basedir=".">
+
+  <target name="getAuthenticationProfileIdForCAS">
+		<echo>An authentication profile id is requied for this build.Authentication handlers are pre-defined inside the 'config' directory</echo>
+
+		<fileset id="build.authentication.profiles.fileset" dir="config/authentication" casesensitive="false">
+			<patternset>
+				<include name="**/*.xml" />
+			</patternset>
+		</fileset>
+		<property name="build.authentication.available.profiles" refid="build.authentication.profiles.fileset" />
+		<echo message="${build.authentication.available.profiles}" file="${build.target.dir}/authprofiles.tmp" />
+
+		<replace file="${build.target.dir}/authprofiles.tmp" value="${line.separator}">
+			<replacefilter>
+				<replacetoken>.xml</replacetoken>
+				<replacevalue />
+			</replacefilter>
+			<replacetoken>;</replacetoken>
+		</replace>
+
+		<loadfile srcFile="${build.target.dir}/authprofiles.tmp" property="build.authentication.profile.ids" />
+		<delete file="${build.target.dir}/authprofiles.tmp" quiet="true" deleteonexit="true" />
+
+		<echo />
+		<echo>Available authentication profile ids for this build are:</echo>
+		<echo message="${build.authentication.profile.ids}" />
+
+		<input message="What authenticatioon profile id do you want to use? " addproperty="cas.authentication.profile.id" defaultvalue="simpleTestUsernamePassword" />
+		<condition property="has.cas.authentication.profile.id">
+			<not>
+				<equals arg1="" arg2="${cas.authentication.profile.id}" />
+			</not>
+		</condition>
+		<fail unless="${has.cas.authentication.profile.id}">CAS authentication profile id cannot be blank.</fail>
+
+		<available file="config/authentication/${cas.authentication.profile.id}.xml" property="exists.cas.authentication.profile.id" />
+		<fail unless="${exists.cas.authentication.profile.id}">Authentication configuration file does not exist for the given profile id.</fail>
+	</target>
+
+</project>
+

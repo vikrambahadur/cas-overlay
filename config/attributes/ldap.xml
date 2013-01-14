@@ -1,0 +1,15 @@
+<bean id="attributeRepository" class="org.jasig.services.persondir.support.ldap.LdapPersonAttributeDao">
+  <property name="baseDN" value="${ldap.authentication.basedn}"/>
+  <property name="requireAllQueryAttributes" value="true"/>
+  <property name="queryAttributeMapping">
+    <map>
+      <entry key="username" value="${cas.ldap.username.attribute}"/>
+    </map>
+  </property>
+  <property name="contextSource" ref="contextSource"/>
+  <property name="resultAttributeMapping">
+    <map>
+      <entry key="${cas.ldap.username.attribute}" value="${cas.ldap.username.attribute}" />
+    </map>
+  </property>
+</bean>

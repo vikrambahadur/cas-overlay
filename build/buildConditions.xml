@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="cas-conditions">
+  <!-- ******************* MAVEN ************************* -->
+	<condition property="mavenExecutableFile" value="mvn.bat" else="mvn">
+		<os family="windows" />
+	</condition>
+	<property name="mavenExecutable" value="${env.MAVEN_HOME}\bin\${mavenExecutableFile}" />
+
+	<!-- ******************* TOMCAT ************************* -->
+	<condition property="tomcatStartupFile" value="startup.bat" else="startup">
+		<os family="windows" />
+	</condition>
+	<property name="tomcatStartup" value="${catalina.home}\bin\${tomcatStartupFile}" />
+
+	<condition property="tomcatShutDownFile" value="shutdown.bat" else="shutdown">
+		<os family="windows" />
+	</condition>
+	<property name="tomcatShutDown" value="${catalina.home}\bin\${tomcatShutDownFile}" />
+
+	<!-- ******************* JASYPT ************************* -->
+	<condition property="jasyptEncryptExecutableFile" value="encrypt.bat" else="encrypt">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptEncryptExecutable" value="${jasypt.bin.dir}\bin\${jasyptEncryptExecutableFile}" />
+
+	<condition property="jasyptDecryptExecutableFile" value="decrypt.bat" else="decrypt">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptDecryptExecutable" value="${jasypt.bin.dir}\bin\${jasyptDecryptExecutableFile}" />
+
+	<condition property="jasyptListAlgorithmsExecutableFile" value="listAlgorithms.bat" else="listAlgorithms">
+		<os family="windows" />
+	</condition>
+	<property name="jasyptListAlgorithmsExecutable" value="${jasypt.bin.dir}\bin\${jasyptListAlgorithmsExecutableFile}" />
+  
+</project>

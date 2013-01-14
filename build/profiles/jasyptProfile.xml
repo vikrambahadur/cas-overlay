@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-jasyptProfiles" basedir=".">
+
+	<target name="jasypt-encrypt" description="Use Jasypt to encrypt a given string">
+		<input message="Input string to encrypt:" addproperty="jasypt.encrypt.arg.input" />
+		<condition property="has.jasypt.arg.input">
+			<not>
+				<equals arg1="" arg2="${jasypt.encrypt.arg.input}" />
+			</not>
+		</condition>
+		<fail unless="${has.jasypt.arg.input}">Encryption input string cannot be blank.</fail>
+
+		<input message="Password (secret key) to encrypt the input string:"
+		       addproperty="jasypt.encrypt.arg.password"
+		       defaultvalue="${env.CAS_JASYPT_ENC_PASSWORD}"
+		/>
+		<condition property="has.jasypt.encrypt.arg.password">
+			<not>
+				<equals arg1="" arg2="${jasypt.encrypt.arg.password}" />
+			</not>
+		</condition>
+		<fail unless="${has.jasypt.encrypt.arg.password}">Encryption password cannot be blank.</fail>
+
+		<input message="Encryption algorithm:"
+		       addproperty="jasypt.encrypt.arg.alg"
+		       defaultvalue="${cas.jasypt.encryption.config.algorithm}"
+		/>
+		<input message="Number of encryption iterations:"
+		       addproperty="jasypt.encrypt.arg.iter"
+		       defaultvalue="${cas.jasypt.encryption.config.key.iterations}"
+		/>
+		<input message="Encryption output type [base64,hexadecimal]:"
+		       addproperty="jasypt.encrypt.arg.outputType"
+		       defaultvalue="${cas.jasypt.encryption.config.output.type}"
+		/>
+
+		<exec dir="." executable="${jasyptEncryptExecutable}">
+			<arg line="input=${jasypt.encrypt.arg.input}" />
+			<arg value="password=${jasypt.encrypt.arg.password}" />
+			<arg value="verbose=true" />
+			<arg value="algorithm=${jasypt.encrypt.arg.alg}" />
+			<arg value="keyObtentionIterations=${jasypt.encrypt.arg.iter}" />
+			<arg value="stringOutputType=${jasypt.encrypt.arg.outputType}" />
+		</exec>
+	</target>
+
+	<target name="jasypt-decrypt" description="Use Jasypt to decrypt a given string">
+		<input message="Input string to decrypt:" addproperty="jasypt.decrypt.arg.input" />
+		<condition property="has.jasypt.arg.input">
+			<not>
+				<equals arg1="" arg2="${jasypt.decrypt.arg.input}" />
+			</not>
+		</condition>
+		<fail unless="${has.jasypt.arg.input}">Decryption input string cannot be blank.</fail>
+
+		<input message="Password (secret key) to decrypt the input string:"
+		       addproperty="jasypt.decrypt.arg.password"
+		       defaultvalue="${env.CAS_JASYPT_ENC_PASSWORD}"
+		/>
+		<condition property="has.jasypt.decrypt.arg.password">
+			<not>
+				<equals arg1="" arg2="${jasypt.decrypt.arg.password}" />
+			</not>
+		</condition>
+		<fail unless="${has.jasypt.decrypt.arg.password}">Decryption password cannot be blank.</fail>
+
+		<input message="decryption algorithm:"
+		       addproperty="jasypt.decrypt.arg.alg"
+		       defaultvalue="${cas.jasypt.encryption.config.algorithm}"
+		/>
+		<input message="Number of decryption iterations:"
+		       addproperty="jasypt.decrypt.arg.iter"
+		       defaultvalue="${cas.jasypt.encryption.config.key.iterations}"
+		/>
+		<input message="decryption output type [base64,hexadecimal]:"
+		       addproperty="jasypt.decrypt.arg.outputType"
+		       defaultvalue="${cas.jasypt.encryption.config.output.type}"
+		/>
+
+		<exec dir="." executable="${jasyptDecryptExecutable}">
+			<arg line="input=${jasypt.decrypt.arg.input}" />
+			<arg value="password=${jasypt.decrypt.arg.password}" />
+			<arg value="verbose=true" />
+			<arg value="algorithm=${jasypt.decrypt.arg.alg}" />
+			<arg value="keyObtentionIterations=${jasypt.decrypt.arg.iter}" />
+			<arg value="stringOutputType=${jasypt.decrypt.arg.outputType}" />
+		</exec>
+	</target>
+
+	<target name="jasypt-listalg" description="Use Jasypt for listing the digest and PBE encryption algorithms available in your JVM">
+		<exec dir="." executable="${jasyptListAlgorithmsExecutable}">
+			<arg value="verbose=true" />
+		</exec>
+	</target>
+  
+	<target name="getIsJasyptEnabledForCAS">
+		<input message="Is Jasypt password encryption disabled (yes/no)? " addproperty="disabled.jasypt.profile.id" defaultvalue="yes" />
+	</target>
+
+</project>
+
