@@ -6,5 +6,6 @@
   <import file="profiles/environmentProfile.xml" />
   <import file="profiles/jasyptProfile.xml" />
   <import file="profiles/attributesProfile.xml" />
+  <import file="profiles/clearpassProfile.xml" />
 </project>
 

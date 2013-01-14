@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cas-buildClearPassProfiles" basedir=".">
+
+	<target name="getIsClearPassEnabledForCAS">
+		<input message="Is ClearPass disabled (yes/no)? " addproperty="disabled.clearpass.profile.id" defaultvalue="yes" />
+	</target>
+  
+</project>
+

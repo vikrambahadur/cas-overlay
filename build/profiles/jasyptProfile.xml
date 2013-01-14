@@ -93,8 +93,44 @@
 		</exec>
 	</target>
   
-	<target name="getIsJasyptEnabledForCAS">
-		<input message="Is Jasypt password encryption disabled (yes/no)? " addproperty="disabled.jasypt.profile.id" defaultvalue="yes" />
+	<!-- **************************************************** -->
+    
+  <target name="getPropertyConfigurerConfigProfileIdForCAS">
+		<echo>A property configurer profile id is requied for this build.</echo>
+
+		<fileset id="build.propConfigurer.profiles.fileset" dir="config/propertyConfigurer" casesensitive="false">
+			<patternset>
+				<include name="**/*.xml" />
+			</patternset>
+		</fileset>
+		<property name="build.propConfigurer.available.profiles" refid="build.propConfigurer.profiles.fileset" />
+		<echo message="${build.propConfigurer.available.profiles}" file="${build.target.dir}/propProfiles.tmp" />
+
+		<replace file="${build.target.dir}/propProfiles.tmp" value="${line.separator}">
+			<replacefilter>
+				<replacetoken>.xml</replacetoken>
+				<replacevalue />
+			</replacefilter>
+			<replacetoken>;</replacetoken>
+		</replace>
+
+		<loadfile srcFile="${build.target.dir}/propProfiles.tmp" property="build.propConfigurer.profile.ids" />
+		<delete file="${build.target.dir}/propProfiles.tmp" quiet="true" deleteonexit="true" />
+
+		<echo />
+		<echo>Available property configurer profile ids for this build are:</echo>
+		<echo message="${build.propConfigurer.profile.ids}" />
+
+		<input message="What property configurer profile id do you want to use? " addproperty="cas.propConfigurer.profile.id" defaultvalue="default" />
+		<condition property="has.cas.propConfigurer.profile.id">
+			<not>
+				<equals arg1="" arg2="${cas.propConfigurer.profile.id}" />
+			</not>
+		</condition>
+		<fail unless="${has.cas.propConfigurer.profile.id}">CAS property configurer profile id cannot be blank.</fail>
+
+		<available file="config/propertyConfigurer/${cas.propConfigurer.profile.id}.xml" property="exists.cas.propConfigurer.profile.id" />
+		<fail unless="${exists.cas.propConfigurer.profile.id}">property configurer profile configuration file does not exist for the given profile id.</fail>
 	</target>
 
 </project>

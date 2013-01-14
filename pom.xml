@@ -40,7 +40,6 @@
         <configuration>	
           <warName>${project.artifactId}</warName>
           <warSourceExcludes>
-            ${maven.war.plugin.resource.excludes.propFileConfigurer},
             ${maven.war.plugin.resource.excludes.ehCacheFileConfig},
             ${maven.war.plugin.resource.excludes.ldapAuthFileConfig},
             ${maven.war.plugin.resource.excludes.ticketRegistryFileConfig}
@@ -51,7 +50,6 @@
               <targetPath>WEB-INF</targetPath>
               
               <excludes>
-                <exclude>${maven.war.plugin.resource.excludes.propFileConfigurer}</exclude>
                 <exclude>${maven.war.plugin.resource.excludes.ehCacheFileConfig}</exclude>
                 <exclude>${maven.war.plugin.resource.excludes.ticketRegistryFileConfig}</exclude>
                 <exclude>${maven.war.plugin.resource.excludes.ldapAuthFileConfig}</exclude>
@@ -92,6 +90,9 @@
 
                 <copy file="${template.file.attributes.config}" overwrite="true" force="true" verbose="true"
                       tofile="${overlay.file.attributes.config}" failonerror="true" />
+                      
+                <copy file="${template.file.property.file.config}" overwrite="true" force="true" verbose="true"
+                      tofile="${overlay.file.property.file.config}" failonerror="true" />
               </target>
 
             </configuration>
@@ -108,6 +109,8 @@
                 <echo message="Removing copied templates from the build" />
                 <delete file="${overlay.file.deployer.config.context}" failonerror="true" />
                 <delete file="${overlay.file.attributes.config}" failonerror="true" />
+                <delete file="${overlay.file.property.file.config}" failonerror="true" />
+                
               </target>
             </configuration>
             <goals>
@@ -125,7 +128,7 @@
               <id>deployerConfigContextExec</id>
               <phase>prepare-package</phase>
               <configuration>
-                  <file>src/main/webapp/WEB-INF/deployerConfigContext.xml</file>
+                  <file>${overlay.file.deployer.config.context}</file>
                   <regex>false</regex>
                   <token>$authenticationHandlerConfiguration$</token>
                   <valueFile>${maven.replacer.plugin.authenticationHandlerFileConfig}</valueFile> 
@@ -140,7 +143,7 @@
               <id>attributesRepositoryExec</id>
               <phase>prepare-package</phase>
               <configuration>
-                  <file>src/main/webapp/WEB-INF/spring-configuration/attributes-configuration.xml</file>
+                  <file>${overlay.file.attributes.config}</file>
                   <regex>false</regex>
                   <token>$attributeRepositoryConfiguration$</token>
                   <valueFile>${maven.replacer.plugin.attributeRepositoryFileConfig}</valueFile>
@@ -150,6 +153,37 @@
                 <goal>replace</goal>
               </goals>
             </execution>
+            
+            <execution>
+              <id>clearPassExec</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                  <file>${overlay.file.deployer.config.context}</file>
+                  <regex>false</regex>
+                  <token>$clearPassMetadataPopulatorConfiguration$</token>
+                  <valueFile>${maven.replacer.plugin.clearPassMetadataPopulatorFileConfig}</valueFile>
+                  <quiet>false</quiet>
+              </configuration>
+              <goals>
+                <goal>replace</goal>
+              </goals>
+            </execution>
+            
+            <execution>
+              <id>propConfigurerExec</id>
+              <phase>prepare-package</phase>
+              <configuration>
+                  <file>${overlay.file.property.file.config}</file>
+                  <regex>false</regex>
+                  <token>$propertyFileConfigurationHandler$</token>
+                  <valueFile>${maven.replacer.plugin.propertyConfigurerFileConfig}</valueFile>
+                  <quiet>false</quiet>
+              </configuration>
+              <goals>
+                <goal>replace</goal>
+              </goals>
+            </execution>
+            
         </executions>
       </plugin>
      
@@ -348,14 +382,23 @@
 		</profile>
 
 		<profile>
-			<id>disableJasyptProfileId</id>
-			<properties>
-				<maven.war.plugin.resource.excludes.propFileConfigurer>
-					**/spring-configuration/propertyFileConfigurer.xml
-				</maven.war.plugin.resource.excludes.propFileConfigurer>							
+			<id>defaultPropConfigurerProfileId</id>
+			<properties>	
+        <maven.replacer.plugin.propertyConfigurerFileConfig>
+          config/propertyConfigurer/default.xml
+        </maven.replacer.plugin.propertyConfigurerFileConfig>
 			</properties>
 		</profile>
 		
+    <profile>
+			<id>jasyptPropConfigurerProfileId</id>
+			<properties>		
+        <maven.replacer.plugin.propertyConfigurerFileConfig>
+          config/propertyConfigurer/jasypt.xml
+        </maven.replacer.plugin.propertyConfigurerFileConfig>
+			</properties>
+		</profile>
+    
 		<profile>
 			<id>disableEhCacheProfileId</id>
 			<properties>
@@ -370,11 +413,21 @@
 		</profile>
     
     <profile>
+			<id>disableClearPassProfileId</id>
+			<properties>
+				<maven.replacer.plugin.clearPassMetadataPopulatorFileConfig>
+					config/clearpass/default.xml
+				</maven.replacer.plugin.clearPassMetadataPopulatorFileConfig>
+			</properties>
+		</profile>
+    
+    <profile>
 			<id>simpleTestUsernamePasswordAuthProfileId</id>
 			<properties>
 				<maven.war.plugin.resource.excludes.ldapAuthFileConfig>
 					**/ldap-configuration.xml
 				</maven.war.plugin.resource.excludes.ldapAuthFileConfig>
+        
         <maven.replacer.plugin.authenticationHandlerFileConfig>
           config/authentication/simpleTestUsernamePassword.xml
         </maven.replacer.plugin.authenticationHandlerFileConfig>

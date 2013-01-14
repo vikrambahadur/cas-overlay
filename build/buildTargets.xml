@@ -5,7 +5,9 @@
   <target name="cleanTomcatLogs" description="Clean tomcat log files">
 		<delete failonerror="false" verbose="true">
 			<fileset dir="${catalina.home}/logs" includes="**/*.*" />
+      <fileset dir="${catalina.home}/bin" includes="**/*.log" />
 		</delete>
+    
 	</target>
 
 	<target name="clean" description="Clean deployed artifacts and logs">
@@ -24,30 +26,12 @@
 
 	<target name="package"
 	        description="Package src artifacts and prepare for deployment"
-	        depends="clean,getMavenProfileIdForCAS,getIsJasyptEnabledForCAS,
+	        depends="clean,getMavenProfileIdForCAS,getPropertyConfigurerConfigProfileIdForCAS,
                    getIsEhCacheEnabledForCAS,getAuthenticationProfileIdForCAS,
-                   getAttributesConfigProfileIdForCAS">
+                   getAttributesConfigProfileIdForCAS,getIsClearPassEnabledForCAS">
 		<echo message="Building CAS based on environment profile ${cas.profile.id}..." />
 
-		<condition property="jasypt.profile.id" value="disableJasyptProfileId" else="">
-			<or>
-				<equals arg1="yes" arg2="${disabled.jasypt.profile.id}" />
-				<equals arg1="Yes" arg2="${disabled.jasypt.profile.id}" />
-				<equals arg1="Y" arg2="${disabled.jasypt.profile.id}" />
-				<equals arg1="y" arg2="${disabled.jasypt.profile.id}" />
-			</or>
-		</condition>
-
-		<condition property="msg.jasypt.profile.id"
-		           value="Using the build profile [${jasypt.profile.id}] to disable Jasypt encryption."
-		           else="Jasypt encryption is enabled for this build.">
-			<not>
-				<equals arg1="" arg2="${jasypt.profile.id}" />
-			</not>
-		</condition>
-		<echo>${msg.jasypt.profile.id}</echo>
-
-
+    <!-- ***************************************************************** -->
 		<condition property="ehcache.profile.id" value="disableEhCacheProfileId" else="">
 			<or>
 				<equals arg1="yes" arg2="${disabled.ehcache.profile.id}" />
@@ -66,17 +50,41 @@
 		</condition>
 		<echo>${msg.ehcache.profile.id}</echo>
 
+    <!-- ***************************************************************** -->
+    <condition property="clearPass.profile.id" value="disableClearPassProfileId" else="">
+			<or>
+				<equals arg1="yes" arg2="${disabled.clearpass.profile.id}" />
+				<equals arg1="Yes" arg2="${disabled.clearpass.profile.id}" />
+				<equals arg1="Y" arg2="${disabled.clearpass.profile.id}" />
+				<equals arg1="y" arg2="${disabled.clearpass.profile.id}" />
+			</or>
+		</condition>
+
+		<condition property="msg.clearPass.profile.id"
+		           value="Using the build profile [${clearPass.profile.id}] to disable ClearPass."
+		           else="ClearPass is turned on for this build.">
+			<not>
+				<equals arg1="" arg2="${clearPass.profile.id}" />
+			</not>
+		</condition>
+		<echo>${msg.clearPass.profile.id}</echo>
+    <!-- ***************************************************************** -->
+    
     <echo>Using the authentication profile [${cas.authentication.profile.id}]</echo>
     <echo>Using the attribuite repository profile [${cas.attributes.profile.id}]</echo>
-    
-    <input message="If you are happy with the build configuration, press any key to continue. Otherwise, use Ctrl+C to terminate the build." />
+    <echo>Using the property configurer profile [${cas.propConfigurer.profile.id}]</echo>
+    <echo/>
+    <input message="If you are happy with the build configuration, press the return key to continue. Otherwise, use Ctrl+C to terminate the build." />
     
 		<exec dir="." executable="${mavenExecutable}">
 			<arg value="clean" />
 			<arg value="package" />
-			<arg value="-PbuildProfileId,${cas.authentication.profile.id}AuthProfileId,
+			<arg value="-PbuildProfileId,
+                  ${cas.authentication.profile.id}AuthProfileId,
                   ${cas.attributes.profile.id}AttrRepoProfileId,
-                  ${jasypt.profile.id},${ehcache.profile.id}" />
+                  ${cas.propConfigurer.profile.id}PropConfigurerProfileId,
+                  ${ehcache.profile.id},
+                  ${clearPass.profile.id}" />
 
 			<arg value="-Denvironment=${cas.profile.id}" />
 			<arg value="-Dmaven.test.skip=true" />

@@ -20,9 +20,7 @@
 
 		<property name="authenticationMetaDataPopulators">
 			<list>
-				<bean class="org.jasig.cas.extension.clearpass.CacheCredentialsMetaDataPopulator">
-					<constructor-arg index="0" ref="credentialsCache" />
-				</bean>
+				$clearPassMetadataPopulatorConfiguration$
 			</list>
 		</property>
 
