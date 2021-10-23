@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-10-23T07:55:13.828Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36" etag="tV6rbtdyj5WcHeor7hQt" version="15.5.8" type="github">
+<mxfile host="app.diagrams.net" modified="2021-10-23T07:58:43.994Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36" etag="4wm8apuK-BNBU0PpXtsV" version="15.5.8" type="github">
   <diagram id="6CumLA6GRascpSRATFEl" name="Page-1">
     <mxGraphModel dx="2240" dy="712" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -95,13 +95,13 @@
           <mxGeometry x="130" y="840" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="FRNXBc57nvbvUXJ40ujN-34" value="StockDB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;align=center;" vertex="1" parent="1">
-          <mxGeometry x="780" y="840" width="60" height="80" as="geometry" />
+          <mxGeometry x="780" y="830" width="60" height="80" as="geometry" />
         </mxCell>
         <mxCell id="FRNXBc57nvbvUXJ40ujN-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-36" target="FRNXBc57nvbvUXJ40ujN-34">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FRNXBc57nvbvUXJ40ujN-36" value="MarketDataRepository" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
-          <mxGeometry x="550" y="760" width="120" height="60" as="geometry" />
+          <mxGeometry x="570" y="740" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="FRNXBc57nvbvUXJ40ujN-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-37" target="FRNXBc57nvbvUXJ40ujN-33">
           <mxGeometry relative="1" as="geometry" />
@@ -194,6 +194,43 @@
         </mxCell>
         <mxCell id="FRNXBc57nvbvUXJ40ujN-77" value="DataService" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
           <mxGeometry x="299" y="840" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-81" value="CustomerDB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;align=center;" vertex="1" parent="1">
+          <mxGeometry x="780" y="1250" width="70" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-82" target="FRNXBc57nvbvUXJ40ujN-84">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-82" value="CustomerService" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="130" y="1260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-83" value="/getCustomerPortfolio" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-51" target="FRNXBc57nvbvUXJ40ujN-82">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="-80" y="1245" as="sourcePoint" />
+            <mxPoint x="70" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-86" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-84" target="FRNXBc57nvbvUXJ40ujN-37">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="389" y="1210" />
+              <mxPoint x="190" y="1210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-88" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-84">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="1290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-84" value="PortfolioService" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="329" y="1260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-90" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FRNXBc57nvbvUXJ40ujN-89" target="FRNXBc57nvbvUXJ40ujN-81">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FRNXBc57nvbvUXJ40ujN-89" value="CustomerRepository" style="rounded=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="550" y="1260" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
